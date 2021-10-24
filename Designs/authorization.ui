@@ -110,7 +110,7 @@ color: rgb(255, 255, 255)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../../Downloads/horizontal_on_white_by_logaster__1_-removebg-preview.png</pixmap>
+     <pixmap>../Logo.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_auth">
@@ -145,7 +145,7 @@ color: rgb(255, 255, 255)
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../../Downloads/Webp.net-resizeimage (1).png</pixmap>
+     <pixmap>../User.png</pixmap>
     </property>
    </widget>
   </widget>
@@ -155,7 +155,7 @@ color: rgb(255, 255, 255)
      <x>0</x>
      <y>0</y>
      <width>796</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

@@ -111,9 +111,9 @@ color: rgb(255, 255, 255)
    <widget class="QPushButton" name="btn_worf_def">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>80</y>
-      <width>641</width>
+      <width>601</width>
       <height>291</height>
      </rect>
     </property>
@@ -149,6 +149,49 @@ color: rgb(255, 255, 255)
     </property>
     <property name="text">
      <string>Нажмите на карточку, чтобы увидеть обратную сторону</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_learn_more">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>75</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 0, 0, 100);</string>
+    </property>
+    <property name="text">
+     <string>Изучать 
+ еще</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_know">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>150</y>
+      <width>75</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 255, 0, 100);</string>
+    </property>
+    <property name="text">
+     <string>Знаю</string>
     </property>
    </widget>
   </widget>

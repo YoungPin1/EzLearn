@@ -38,6 +38,27 @@
        <height>409</height>
       </rect>
      </property>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>240</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Английский. Овощи и фрукты</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="lbl_last">
@@ -55,7 +76,7 @@ color: rgb(255, 255, 255)
 </string>
     </property>
     <property name="text">
-     <string>Последние действия</string>
+     <string>Модули</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_create">
@@ -83,7 +104,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
