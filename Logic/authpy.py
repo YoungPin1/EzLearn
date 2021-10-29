@@ -1,10 +1,11 @@
 import sqlite3
 import sys
-from main_windowpy import EzMain
+
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 
 import pswd_login_check
+from main_windowpy import EzMain
 
 
 class Authorization(QMainWindow):

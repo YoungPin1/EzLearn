@@ -45,6 +45,7 @@ class AddModule(QMainWindow):
                         row.append(item.text())
                 writer.writerow(row)
 
+
     def add_row(self):
         row_count = self.tbl_wdt.rowCount()
         self.tbl_wdt.insertRow(row_count)
