@@ -1,5 +1,5 @@
 import csv
-
+import sqlite3
 from PyQt5 import uic
 from PyQt5.QtWidgets import QFileDialog, QInputDialog
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
@@ -44,8 +44,6 @@ class AddModule(QMainWindow):
                     if item is not None:
                         row.append(item.text())
                 writer.writerow(row)
-
-
     def add_row(self):
         row_count = self.tbl_wdt.rowCount()
         self.tbl_wdt.insertRow(row_count)
