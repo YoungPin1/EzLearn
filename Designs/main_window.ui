@@ -110,14 +110,6 @@ color: rgb(255, 255, 255);</string>
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255);</string>
    </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Инструменты</string>
-    </property>
-    <addaction name="action_exit_acc"/>
-    <addaction name="action_exit_app"/>
-   </widget>
-   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_exit_acc">

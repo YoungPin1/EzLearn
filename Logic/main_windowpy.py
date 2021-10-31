@@ -1,26 +1,20 @@
-import sys
-
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog
+from PyQt5.QtWidgets import QMainWindow
 
-from add_module import AddModule
-from exit_func import ExitDialog
+import add_module
+
 
 class EzMain(QMainWindow):
-    def __init__(self):
+    def __init__(self, logged_user_id):
+        self.logged_user_id = logged_user_id
         super().__init__()
         uic.loadUi('../Designs/main_window.ui', self)
-        self.add_module_run = AddModule()
         self.run()
 
     def run(self):
         self.btn_create.clicked.connect(self.create)
-        self.action_exit_acc.triggered.connect(self.exit)
 
     def create(self):
+        self.add_module_run = add_module.AddModule(self.logged_user_id)
         self.hide()
         self.add_module_run.show()
-
-    def exit(self):
-        dlg = ExitDialog()
-        dlg.exec()
