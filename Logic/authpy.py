@@ -2,9 +2,9 @@ import sqlite3
 import sys
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication
 
-import pswd_login_check
+from constants import *
 from main_windowpy import EzMain
 
 
@@ -12,88 +12,67 @@ class Authorization(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('../Designs/authorization.ui', self)
-        app.setStyle('Fusion')
+        app.setStyle(app_style)
         self.main_window_open = EzMain()
         self.run()
 
     def run(self):
-        self.action_pswd.triggered.connect(self.show_rule_pswd)
-        self.action_login.triggered.connect(self.show_rule_login)
         self.btn_login.clicked.connect(self.login)
         self.btn_sign_up.clicked.connect(self.sign_up)
 
-    def show_rule_login(self):
-        msg = QMessageBox()
-        msg.setStyleSheet('background-color: rgb(40, 40, 40);'
-                          'color: rgb(255, 255, 255)')
-        msg.setWindowTitle('Критерии логина')
-        msg.setText('1. Длина логина не менее 5 символ\n'
-                    '2. Хотя бы один заглавный и один прописной символ\n'
-                    '3. Не допускается использование пробела\n')
-        msg.exec_()
-
-    def show_rule_pswd(self):
-        msg = QMessageBox()
-        msg.setStyleSheet('background-color: rgb(40, 40, 40);'
-                          'color: rgb(255, 255, 255)')
-        msg.setWindowTitle('Критерии пароля')
-        msg.setText('1. Длина пароля не менее 8 символ\n'
-                    '2. Хотя бы один заглавный и один прописной символ\n'
-                    '3. Хотя бы одна цифра\n')
-        msg.exec_()
-
     def login(self):
-        self.statusBar().setStyleSheet("color : red")
-        con = sqlite3.connect('../EzLearndb.db')
-        cur = con.cursor()
-        login_inp = self.ledit_login.text()
-        result = cur.execute("""SELECT * FROM auth_data
-         WHERE login = ?""", (login_inp,)).fetchone()
-        if len(login_inp) == 0:
-            self.statusBar().showMessage('Введите логин')
-        elif result is None:
-            self.statusBar().showMessage('Такого пользователя не существует')
+        login_inp, pswd_inp = self.ledit_login.text(), self.ledit_pswd.text()
+        user_data_from_db = self.get_log_pswd_db(login_inp)
+        check_inp = self.check_login_pswd(login_inp, pswd_inp, origin='sign_in', db_log_pswd=user_data_from_db)
+        if check_inp == 'ok':
+            self.hide()
+            self.main_window_open.show()
         else:
-            password_inp = self.ledit_pswd.text()
-            if len(password_inp) == 0:
-                self.statusBar().showMessage('Введите пароль')
-            else:
-                if password_inp != str(result[2]):
-                    self.statusBar().showMessage('Неправильный пароль')
-                else:
-                    self.statusBar().setStyleSheet("color : green")
-                    self.statusBar().showMessage('Успешно!')
-                    self.hide()
-                    self.main_window_open.show()
-        con.close()
+            self.statusBar().showMessage(check_inp)
 
     def sign_up(self):
-        self.statusBar().setStyleSheet("color : red")
-        login_inp = self.ledit_login.text()
-        pswd_inp = self.ledit_pswd.text()
-        check_login = pswd_login_check.login_check(login_inp)
-        check_pswd = pswd_login_check.pswd_check(pswd_inp)
-        if check_login != 'good':
-            self.statusBar().showMessage(check_login)
-        else:
-            if check_pswd != 'good':
-                self.statusBar().showMessage(check_pswd)
+        login_inp, pswd_inp = self.ledit_login.text(), self.ledit_pswd.text()
+        user_data_from_db, check_inp = self.get_log_pswd_db(login_inp), self.check_login_pswd(login_inp, pswd_inp)
+        if check_inp == 'ok':
+            if user_data_from_db is None:
+                self.insert_to_db(login_inp, pswd_inp)
+                self.hide()
+                self.main_window_open.show()
             else:
-                con = sqlite3.connect('../EzLearndb.db')
-                cur = con.cursor()
-                result = cur.execute("""SELECT * FROM auth_data
-                 WHERE login = ? and password = ?""", (login_inp, pswd_inp)).fetchone()
-                if result is None:
-                    cur.execute("""INSERT INTO auth_data(login, password)  
-                    VALUES(?, ?)""", (login_inp, pswd_inp)).fetchall()
-                    self.statusBar().setStyleSheet("color : green")
-                    self.statusBar().showMessage('Успешно!')
-                    con.commit()
-                    con.close()
-                    self.hide()
-                    self.main_window_open.show()
-                else:
-                    self.statusBar().showMessage('Такой пользователь уже существует')
+                self.statusBar().showMessage('Такой пользователь уже существует')
+        else:
+            self.statusBar().showMessage(check_inp)
+
+    def get_log_pswd_db(self, login_inp):
+        con = sqlite3.connect(db_location)
+        cur = con.cursor()
+        res = cur.execute("""SELECT * FROM auth_data
+         WHERE login = ? """, (login_inp,)).fetchone()
+        con.close()
+        return res
+
+    def insert_to_db(self, login_inp, pswd_inp):
+        con = sqlite3.connect(db_location)
+        cur = con.cursor()
+        cur.execute("""INSERT INTO auth_data(login, password)  
+                        VALUES(?, ?)""", (login_inp, pswd_inp)).fetchall()
+        con.commit()
+        con.close()
+
+    def check_login_pswd(self, login_inp, pswd_inp, origin='sign_up', db_log_pswd=None):
+        try:
+            if len(login_inp) == 0:
+                raise Exception('Введите логин')
+            elif origin == 'sign_in' and db_log_pswd is None:
+                raise Exception('Такого пользователя не существует')
+            elif len(pswd_inp) == 0:
+                return 'Введите пароль'
+            elif origin == 'sign_in' and pswd_inp != str(db_log_pswd[2]):
+                raise Exception('Неправильный пароль')
+            else:
+                raise Exception('ok')
+        except Exception as error:
+            return str(error)
 
 
 def except_hook(cls, exception, traceback):

@@ -116,7 +116,7 @@ color: rgb(255, 255, 255)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../Logo.png</pixmap>
+     <pixmap>../NotCode/Logo.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_auth">
@@ -151,7 +151,7 @@ color: rgb(255, 255, 255)
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../User.png</pixmap>
+     <pixmap>../NotCode/User.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_pswd">
@@ -223,14 +223,6 @@ color: rgb(255, 255, 255)
    <property name="styleSheet">
     <string notr="true">color: rgb(255, 255, 255)</string>
    </property>
-   <widget class="QMenu" name="menu_pswd">
-    <property name="title">
-     <string>Критерии</string>
-    </property>
-    <addaction name="action_login"/>
-    <addaction name="action_pswd"/>
-   </widget>
-   <addaction name="menu_pswd"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="styleSheet">

@@ -1,8 +1,11 @@
 import csv
-import sqlite3
+
 from PyQt5 import uic
 from PyQt5.QtWidgets import QFileDialog, QInputDialog
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
+from constants import *
+
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QApplication
+import sys
 
 
 class AddModule(QMainWindow):
@@ -27,23 +30,8 @@ class AddModule(QMainWindow):
         self.btn_import.clicked.connect(self.import_table)
         self.btn_add.clicked.connect(self.add_row)
         self.btn_del.clicked.connect(self.del_row)
-        self.btn_create.clicked.connect(self.create_module)
+        self.btn_create.clicked.connect(self.save_table)
 
-    def create_module(self):
-        with open('user_block.csv', 'w', newline='', encoding='utf8') as csvfile:
-            writer = csv.writer(
-                csvfile, delimiter=';', quotechar='"',
-                quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(
-                [self.tbl_wdt.horizontalHeaderItem(i).text()
-                 for i in range(self.tbl_wdt.columnCount())])
-            for i in range(self.tbl_wdt.rowCount()):
-                row = []
-                for j in range(self.tbl_wdt.columnCount()):
-                    item = self.tbl_wdt.item(i, j)
-                    if item is not None:
-                        row.append(item.text())
-                writer.writerow(row)
     def add_row(self):
         row_count = self.tbl_wdt.rowCount()
         self.tbl_wdt.insertRow(row_count)
@@ -51,19 +39,21 @@ class AddModule(QMainWindow):
     def del_row(self):
         self.tbl_wdt.removeRow(int((self.ledit_del.text())) - 1)
 
-    def import_table(self):
+    def transform_to_csv(self):
         del_quo, ok_pressed = QInputDialog.getText(self, "Разделитель",
                                                    "Введите delimiter и quotechar\n"
                                                    "вашего файла через пробел")
         delim, quote = del_quo.split(' ')
         table_dir = QFileDialog.getOpenFileName(self, 'Выбрать файл', '')[0]
         with open(table_dir, mode='r', encoding='utf8') as file:
-            with open('block.csv', mode='w', encoding="utf8") as csvfile:
+            with open(import_module_dir, mode='w', encoding="utf8") as csvfile:
                 for i in file.readlines():
                     line = i.replace(quote, '"').strip().split(delim)
                     csvfile.write(';'.join(line) + '\n')
 
-        with open('block.csv', mode='r', encoding="utf8") as csvfile:
+    def import_table(self):
+        self.transform_to_csv()
+        with open(import_module_dir, mode='r', encoding="utf8") as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quotechar='"')
             title = next(reader)
             self.tbl_wdt.setColumnCount(len(title))
@@ -75,3 +65,27 @@ class AddModule(QMainWindow):
                 for j, elem in enumerate(row):
                     self.tbl_wdt.setItem(
                         i, j, QTableWidgetItem(elem))
+
+    def save_table(self):
+        with open(user_created_dir, 'w', newline='', encoding='utf8') as csvfile:
+            writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow([self.tbl_wdt.horizontalHeaderItem(i).text() for i in range(self.tbl_wdt.columnCount())])
+            for i in range(self.tbl_wdt.rowCount()):
+                row = []
+                for j in range(self.tbl_wdt.columnCount()):
+                    item = self.tbl_wdt.item(i, j)
+                    if item is not None:
+                        row.append(item.text())
+                writer.writerow(row)
+
+
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = AddModule()
+    ex.show()
+    sys.excepthook = except_hook
+    sys.exit(app.exec_())
