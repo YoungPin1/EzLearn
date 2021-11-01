@@ -166,9 +166,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QTableWidget" name="tbl_wdt">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>300</x>
       <y>10</y>
-      <width>501</width>
+      <width>541</width>
       <height>531</height>
      </rect>
     </property>

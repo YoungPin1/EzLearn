@@ -18,13 +18,13 @@ class MainLearn(QMainWindow):
         self.run()
         self.init_UI()
 
-    def run(self):
-        self.btn_exit.clicked.connect(self.back_to_main)
-        print(self.words_from_db())
-
     def init_UI(self):
         table.create_table(self)
         self.lbl_name.setText(self.module_name)
+
+    def run(self):
+        self.btn_exit.clicked.connect(self.back_to_main)
+        print(self.words_from_db())
 
     def words_from_db(self):
         con = sqlite3.connect(db_location)
