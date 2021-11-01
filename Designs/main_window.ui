@@ -20,11 +20,26 @@
    <widget class="QScrollArea" name="scroll_ar">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>50</x>
       <y>50</y>
-      <width>740</width>
-      <height>411</height>
+      <width>700</width>
+      <height>400</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>230</width>
+      <height>120</height>
+     </size>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="widgetResizable">
      <bool>true</bool>
@@ -34,31 +49,10 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>738</width>
-       <height>409</height>
+       <width>698</width>
+       <height>398</height>
       </rect>
      </property>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>240</width>
-        <height>131</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>Английский. Овощи и фрукты</string>
-      </property>
-     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="lbl_last">

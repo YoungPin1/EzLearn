@@ -5,8 +5,9 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
-from constants import *
 import main_windowpy
+from constants import *
+import table
 
 class AddModule(QMainWindow):
     def __init__(self, logged_user_id):
@@ -17,15 +18,7 @@ class AddModule(QMainWindow):
         self.init_table()
 
     def init_table(self):
-        self.tbl_wdt.horizontalHeader().setStyleSheet("::section{Background-color:rgb(40,40,40)}")
-        self.tbl_wdt.verticalHeader().setStyleSheet("::section{Background-color:rgb(40,40,40)}")
-        self.tbl_wdt.setColumnCount(2)
-        self.tbl_wdt.setHorizontalHeaderLabels(['Термин', 'Определение'])
-        self.tbl_wdt.setRowCount(0)
-        head_view = self.tbl_wdt.horizontalHeader()
-        head_view.setSectionResizeMode(0, 1)
-        head_view.setSectionResizeMode(1, 1)
-        self.tbl_wdt.resizeColumnsToContents()
+        table.create_table(self)
 
     def run(self):
         self.btn_import.clicked.connect(self.import_table)
