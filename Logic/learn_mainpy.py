@@ -1,7 +1,7 @@
 import sqlite3
 
-from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5 import uic, QtWidgets
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
 import main_windowpy
 import table
@@ -24,7 +24,17 @@ class MainLearn(QMainWindow):
 
     def run(self):
         self.btn_exit.clicked.connect(self.back_to_main)
-        print(self.words_from_db())
+        self.fill_table(self.words_from_db())
+
+    def fill_table(self, list_of_words):
+        pass
+        print(list_of_words)
+        # for i, row in enumerate(list_of_words):
+        #     self.tbl_wdt.setRowCount(
+        #         self.tbl_wdt.rowCount() + 1)
+        #     for j, elem in enumerate(row):
+        #         self.tbl_wdt.setItem(
+        #             i, j, QTableWidgetItem(elem))
 
     def words_from_db(self):
         con = sqlite3.connect(db_location)

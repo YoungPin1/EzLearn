@@ -78,6 +78,7 @@ class AddModule(QMainWindow):
         with open(import_module_dir, mode='r', encoding="utf8") as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quotechar='"')
             title = next(reader)
+            print(len(title))
             self.tbl_wdt.setColumnCount(len(title))
             self.tbl_wdt.setHorizontalHeaderLabels(title)
             self.tbl_wdt.setRowCount(0)
