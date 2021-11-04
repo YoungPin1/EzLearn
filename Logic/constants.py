@@ -29,3 +29,6 @@ GET_ID_WORDS_DEFINITIONS = """SELECT * FROM User_module_{}"""
 GET_NAME_USER_ID = """SELECT id_user, module_name FROM user_modules WHERE module_id = ?"""
 MODULE_LEANED_TEXT = "Модуль успешно пройден"
 RESET_MODULE_PROGRESS = """UPDATE User_module_{} SET learning = 0 WHERE id = ?"""
+NORMAL_COLOR = '''background-color: rgb(242, 180, 0);
+font: 10pt "MS Shell Dlg 2";
+color: rgb(255, 255, 255);'''

@@ -110,10 +110,10 @@ class AddModule(QMainWindow):
                 if item is not None:
                     row.append(str(item.text()))
             all_words.append(row)
-        if len(all_words) != 0:
+        if len(all_words) > 4:
             module_id = query_db.Database().create_db_table(self.logged_user_id, self.ledit_name.text())
             for row in all_words:
                 query_db.Database().add_row_to_db(row, module_id)
             self.sucsess_message()
         else:
-            self.statusBar().showMessage('Введите слова')
+            self.statusBar().showMessage('Введите слова более 4 слов')

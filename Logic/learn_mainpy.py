@@ -25,21 +25,22 @@ class MainLearn(QMainWindow):
         self.lbl_name.setText(self.module_name)
         self.count_progress()
 
-    def count_progress(self):
-        all_words = query_db.Database().get_progress(self.module_id)
-        total = [float(i[2] / 2) for i in all_words]
-        if len(all_words) != 0:
-            self.prbar.setValue((sum(total) / len(all_words)) * 100)
-
     def run(self):
         self.btn_exit.clicked.connect(self.back_to_main)
         self.fill_table(self.db_words)
         self.btn_edit.clicked.connect(self.edit)
         self.btn_download.clicked.connect(self.download)
         self.btn_delete.clicked.connect(self.detele_message)
-        self.btn_cards.clicked.connect(self.cards)
-        self.btn_learbh.clicked.connect(self.by_hard)
+        self.btn_cards.clicked.connect(self.check_if_progress_100)
+        self.btn_learbh.clicked.connect(self.check_if_progress_100)
         self.btn_reset.clicked.connect(self.reset)
+
+    def count_progress(self):
+        all_words = query_db.Database().get_progress(self.module_id)
+        total = [float(i[2] / 2) for i in all_words]
+        if len(all_words) != 0:
+            self.progress = (sum(total) / len(all_words)) * 100
+            self.prbar.setValue(self.progress)
 
     def reset(self):
         query_db.Database().reset_progress(self.module_id)
@@ -52,15 +53,18 @@ class MainLearn(QMainWindow):
             for j in range(2):
                 self.tbl_wdt.setItem(i, j, QTableWidgetItem(reader[i][j]))
 
+    def check_if_progress_100(self):
+        if self.progress == 100:
+            self.reset()
+        if self.sender().text() == 'Карточки':
+            self.cards()
+        elif self.sender().text() == 'Заучивание':
+            self.by_hard()
+
     def by_hard(self):
         self.cards_window = learn_bhpy.ByHeart(module_id=self.module_id)
         self.hide()
         self.cards_window.show()
-
-    def back_to_main(self):
-        self.main_window = main_windowpy.EzMain(self.logged_user_id)
-        self.hide()
-        self.main_window.show()
 
     def detele_message(self):
         msg_box = QMessageBox()
@@ -120,3 +124,8 @@ class MainLearn(QMainWindow):
         self.cards_window = learn_cardspy.Cards(module_id=self.module_id)
         self.hide()
         self.cards_window.show()
+
+    def back_to_main(self):
+        self.main_window = main_windowpy.EzMain(self.logged_user_id)
+        self.hide()
+        self.main_window.show()

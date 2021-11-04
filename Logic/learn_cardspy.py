@@ -7,6 +7,7 @@ import constants
 import entre_mainlearn
 import messageboxes
 import query_db
+import load_words_for_learning
 
 
 class Cards(QMainWindow):
@@ -14,22 +15,15 @@ class Cards(QMainWindow):
         super().__init__()
         uic.loadUi('../Designs/learn_cards.ui', self)
         self.module_id = module_id
-        self.all_words, self.learned, self.left = [], [], []
         self.run()
 
     def run(self):
-        self.load_words()
+        self.get_words()
         self.btn_know.clicked.connect(self.learned_word)
         self.btn_learn_more.clicked.connect(self.show_words)
 
-    def load_words(self):
-        self.all_words = query_db.Database().get_all_data_module(self.module_id)
-        print(self.all_words)
-        for i in self.all_words:
-            if i[3] == 2:
-                self.learned.append(i)
-            else:
-                self.left.append(i)
+    def get_words(self):
+        self.all_words, self.learned, self.left = load_words_for_learning.load_words(self.module_id)
         self.show_words()
 
     def show_words(self):
