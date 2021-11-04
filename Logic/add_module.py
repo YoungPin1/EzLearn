@@ -1,19 +1,23 @@
 import csv
-import sqlite3
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox, QMainWindow, QTableWidgetItem
 
+import learn_mainpy
 import main_windowpy
-from constants import *
+import query_db
 import table
+from constants import *
+
 
 class AddModule(QMainWindow):
-    def __init__(self, logged_user_id):
+    def __init__(self, logged_user_id, module_words='None', module_id='None', module_name='None'):
         super().__init__()
         uic.loadUi('../Designs/add_module.ui', self)
         self.logged_user_id = int(logged_user_id)
+        self.module_id = module_id
+        self.module_words = module_words
+        self.module_name = module_name
         self.run()
         self.init_table()
 
@@ -26,6 +30,19 @@ class AddModule(QMainWindow):
         self.btn_del.clicked.connect(self.del_row)
         self.btn_create.clicked.connect(self.save_table)
         self.btn_exit.clicked.connect(self.message_show)
+        if self.module_id != 'None':
+            self.change_ui()
+            self.table_data(self.module_words)
+
+    def change_ui(self):
+        self.lbl_create.setText('Редактировать учебный модуль')
+        self.ledit_name.setText(self.module_name)
+
+    def table_data(self, module_words):
+        self.tbl_wdt.setRowCount(len(module_words))
+        for i in range(len(module_words)):
+            for j in range(2):
+                self.tbl_wdt.setItem(i, j, QTableWidgetItem(module_words[i][j]))
 
     def back_to_main(self):
         self.main_window = main_windowpy.EzMain(self.logged_user_id)
@@ -33,24 +50,24 @@ class AddModule(QMainWindow):
         self.main_window.show()
 
     def message_show(self):
-        msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Information)
-        msgBox.setText("Все ваши данные не будут сохранены\n"
-                       "Вы точно хотите выйти?")
-        msgBox.setWindowTitle('Сообщение')
-        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        exit_value = msgBox.exec()
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText("Все ваши данные не будут сохранены\n"
+                        "Вы точно хотите выйти?")
+        msg_box.setWindowTitle('Сообщение')
+        msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        exit_value = msg_box.exec()
         if exit_value == QMessageBox.Ok:
             self.back_to_main()
 
     def sucsess_message(self):
-        msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Information)
-        msgBox.setText("Модуль успешно сохранен\n"
-                       "Возвращаю на главную страницу")
-        msgBox.setWindowTitle('Сообщение')
-        msgBox.setStandardButtons(QMessageBox.Ok)
-        exit_value = msgBox.exec()
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText("Модуль успешно сохранен\n"
+                        "Возвращаю на главную страницу")
+        msg_box.setWindowTitle('Сообщение')
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        exit_value = msg_box.exec()
         if exit_value == QMessageBox.Ok:
             self.back_to_main()
 
@@ -68,20 +85,15 @@ class AddModule(QMainWindow):
         delim, quote = del_quo.split(' ')
         table_dir = QFileDialog.getOpenFileName(self, 'Выбрать файл', '')[0]
         with open(table_dir, mode='r', encoding='utf8') as file:
-            with open(import_module_dir, mode='w', encoding="utf8") as csvfile:
+            with open(IMPORT_MODULE_DIR, mode='w', encoding="utf8") as csvfile:
                 for i in file.readlines():
                     line = i.replace(quote, '"').strip().split(delim)
                     csvfile.write(';'.join(line) + '\n')
 
     def import_table(self):
         self.transform_to_csv()
-        with open(import_module_dir, mode='r', encoding="utf8") as csvfile:
+        with open(IMPORT_MODULE_DIR, mode='r', encoding="utf8") as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quotechar='"')
-            title = next(reader)
-            print(len(title))
-            self.tbl_wdt.setColumnCount(len(title))
-            self.tbl_wdt.setHorizontalHeaderLabels(title)
-            self.tbl_wdt.setRowCount(0)
             for i, row in enumerate(reader):
                 self.tbl_wdt.setRowCount(
                     self.tbl_wdt.rowCount() + 1)
@@ -90,29 +102,18 @@ class AddModule(QMainWindow):
                         i, j, QTableWidgetItem(elem))
 
     def save_table(self):
-        module_id = self.create_db_table(self.logged_user_id, self.ledit_name.text())
+        all_words = []
         for i in range(self.tbl_wdt.rowCount()):
             row = []
             for j in range(self.tbl_wdt.columnCount()):
                 item = self.tbl_wdt.item(i, j)
                 if item is not None:
-                    row.append(item.text())
-            self.add_row_to_db(row, module_id)
+                    row.append(str(item.text()))
+            all_words.append(row)
+        if len(all_words) != 0:
+            module_id = query_db.Database().create_db_table(self.logged_user_id, self.ledit_name.text())
+            for row in all_words:
+                query_db.Database().add_row_to_db(row, module_id)
             self.sucsess_message()
-
-    def create_db_table(self, logged_user_id, table_name):
-        con = sqlite3.connect(db_location)
-        cur = con.cursor()
-        cur.execute(user_module_save_data, (logged_user_id, table_name)).fetchone()
-        module_id = cur.execute(get_module_id_from_user_modules, (logged_user_id, table_name)).fetchone()[0]
-        cur.execute(new_module_db.format(str(module_id))).fetchone()
-        con.commit()
-        con.close()
-        return module_id
-
-    def add_row_to_db(self, row, module_id):
-        con = sqlite3.connect(db_location)
-        cur = con.cursor()
-        cur.execute(insert_row_to_db.format(str(module_id)), (str(row[0]), str(row[1]))).fetchone()
-        con.commit()
-        con.close()
+        else:
+            self.statusBar().showMessage('Введите слова')

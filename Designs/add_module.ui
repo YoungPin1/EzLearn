@@ -92,7 +92,7 @@ font: 12pt &quot;MS Shell Dlg 2&quot;;
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Создать</string>
+     <string>Сохранить</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_name_module">
@@ -226,7 +226,7 @@ color: rgb(255, 255, 255);</string>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">color: rgb(255, 0, 0);</string>
    </property>
   </widget>
   <action name="actio_menu">

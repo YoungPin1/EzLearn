@@ -39,9 +39,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="ledit_all">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>260</x>
       <y>500</y>
-      <width>161</width>
+      <width>51</width>
       <height>41</height>
      </rect>
     </property>
@@ -54,61 +54,13 @@ color: rgb(255, 255, 255)
 </string>
     </property>
     <property name="text">
-     <string>Всего слов: </string>
+     <string/>
     </property>
     <property name="readOnly">
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="ledit_learned">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>500</y>
-      <width>161</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="whatsThis">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(255, 255, 255)
-</string>
-    </property>
-    <property name="text">
-     <string>Усвоено:</string>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="ledit_left">
-    <property name="geometry">
-     <rect>
-      <x>500</x>
-      <y>500</y>
-      <width>161</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="whatsThis">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(255, 255, 255)
-</string>
-    </property>
-    <property name="text">
-     <string>Осталось:</string>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_worf_def">
+   <widget class="QPushButton" name="btn_word_def">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -192,6 +144,108 @@ color: rgb(255, 255, 255)
     </property>
     <property name="text">
      <string>Знаю</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_all">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>510</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255)
+</string>
+    </property>
+    <property name="text">
+     <string>Всего слов:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_know">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>510</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255)
+</string>
+    </property>
+    <property name="text">
+     <string>Усвоено:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ledit_know">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>500</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255)
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_left">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>510</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255)
+</string>
+    </property>
+    <property name="text">
+     <string>Осталось:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ledit_left">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>500</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 255, 255)
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

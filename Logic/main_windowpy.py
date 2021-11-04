@@ -1,13 +1,12 @@
 import math
-import sqlite3
 
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QGridLayout, QPushButton, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QMainWindow, QGridLayout, QPushButton, QWidget
 
 import add_module
 import learn_mainpy
-from constants import *
+import query_db
 
 
 class EzMain(QMainWindow):
@@ -31,7 +30,7 @@ class EzMain(QMainWindow):
         self.scroll_ar.setWidget(self.widget)
 
     def mark_widgets(self):
-        self.names_ids = self.get_module_names()
+        self.names_ids = query_db.Database().get_module_names(self.logged_user_id)
         rows = math.ceil(len(self.names_ids) / 3)
         while len(self.names_ids) < rows * 3:
             self.names_ids.append(('', ''))
@@ -52,21 +51,12 @@ class EzMain(QMainWindow):
             self.grid.addWidget(self.btn_name, *position)
 
     def entre_module(self):
-        module_name = self.sender().text()
         module_id = self.sender().accessibleName()
-        self.main_learn = learn_mainpy.MainLearn(module_id, module_name, self.logged_user_id)
+        self.main_learn = learn_mainpy.MainLearn(module_id=module_id)
         self.hide()
         self.main_learn.show()
-
 
     def create(self):
         self.add_module_run = add_module.AddModule(self.logged_user_id)
         self.hide()
         self.add_module_run.show()
-
-    def get_module_names(self):
-        con = sqlite3.connect(db_location)
-        cur = con.cursor()
-        module_names_ids = [i for i in cur.execute(get_module_names, (self.logged_user_id,)).fetchall()]
-        con.close()
-        return module_names_ids
