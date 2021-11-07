@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5 import QtGui
+
 import main_windowpy
 import query_db
 from Designs.design_authorization import Ui_MainWindow

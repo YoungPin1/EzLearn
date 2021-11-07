@@ -48,7 +48,7 @@ class MainLearn(QMainWindow, Ui_MainWindow):
         total = [float(i[4] / 2) for i in all_words]
         if len(all_words) != 0:
             # 100 отображается в процентах
-            self.progress = (sum(total) / len(all_words)) * 100
+            self.progress = int((sum(total) / len(all_words)) * 100)
             self.prbar.setValue(self.progress)
         return self.progress
 
