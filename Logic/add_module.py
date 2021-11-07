@@ -21,7 +21,7 @@ class AddModule(QMainWindow):
         table.create_table(self)
 
     def run(self):
-        self.btn_import.clicked.connect(self.import_table)
+        self.btn_import.clicked.connect(self.transform_to_csv)
         self.btn_add.clicked.connect(self.add_row)
         self.btn_del.clicked.connect(self.del_row)
         self.btn_create.clicked.connect(self.save_table)
@@ -51,22 +51,22 @@ class AddModule(QMainWindow):
         self.tbl_wdt.insertRow(row_count)
 
     def del_row(self):
-        self.tbl_wdt.removeRow(int((self.ledit_del.text())) - 1)
+        if self.ledit_del.text() != '':
+            self.tbl_wdt.removeRow(int((self.ledit_del.text())) - 1)
 
     def transform_to_csv(self):
-        del_quo, ok_pressed = QInputDialog.getText(self, "Разделитель",
-                                                   "Введите delimiter и quotechar\n"
-                                                   "вашего файла через пробел")
-        delim, quote = del_quo.split(' ')
-        table_dir = QFileDialog.getOpenFileName(self, 'Выбрать файл', '')[0]
-        with open(table_dir, mode='r', encoding='utf8') as file:
-            with open(IMPORT_MODULE_DIR, mode='w', encoding="utf8") as csvfile:
-                for i in file.readlines():
-                    line = i.replace(quote, '"').strip().split(delim)
-                    csvfile.write(';'.join(line) + '\n')
+        del_quo, ok_pressed = QInputDialog.getText(self, SEPARATOR, IMPORT_DIALOG_MESSAGE)
+        if del_quo != '':
+            delim, quote = del_quo.split(' ')
+            table_dir = QFileDialog.getOpenFileName(self, 'Выбрать файл', '')[0]
+            with open(table_dir, mode='r', encoding='utf8') as file:
+                with open(IMPORT_MODULE_DIR, mode='w', encoding="utf8") as csvfile:
+                    for i in file.readlines():
+                        line = i.replace(quote, '"').strip().split(delim)
+                        csvfile.write(';'.join(line) + '\n')
+        self.import_table()
 
     def import_table(self):
-        self.transform_to_csv()
         with open(IMPORT_MODULE_DIR, mode='r', encoding="utf8") as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quotechar='"')
             for i, row in enumerate(reader):

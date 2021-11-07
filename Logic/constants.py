@@ -44,9 +44,8 @@ EDIT_MODULE_TEXT = 'Редактировать учебный модуль'
 DELETE_MESSAGE = "Все ваши данные не будут сохранены\n Вы точно хотите выйти?"
 SUCCESS_MESSAGE = "Модуль успешно сохранен\n Возвращаю на главную страницу"
 MESSAGE = 'Сообщение'
-IMPORT_DIALOG_MESSAGE = "Разделитель",
-"Введите delimiter и quotechar\n"
-"вашего файла через пробел"
+SEPARATOR = "Разделитель"
+IMPORT_DIALOG_MESSAGE = "Введите delimiter и quotechar\nвашего файла через пробел"
 NO_LESS_THAN_5_WORDS = 'Введите не менее 5 слов'
 DELETE_MODULE_TEXT = "Модуль будет удален без возможности восстановления\n Вы точно хотите выйти?"
 MESSAGE_SAVED = "Модуль успещно сохранен"
