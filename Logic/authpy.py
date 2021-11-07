@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication
 
 import main_windowpy
 import query_db
@@ -11,7 +11,7 @@ from constants import *
 class Authorization(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('../Designs/authorization.ui', self)
+        uic.loadUi(AUTHORIZATION_DESIGN, self)
         app.setStyle(APP_STYLE)
         self.run()
 
@@ -22,8 +22,8 @@ class Authorization(QMainWindow):
     def login(self):
         login_inp, pswd_inp = self.ledit_login.text(), self.ledit_pswd.text()
         user_data_from_db = query_db.Database().get_log_pswd_db(login_inp)
-        check_inp = self.check_login_pswd(login_inp, pswd_inp, origin='sign_in', db_log_pswd=user_data_from_db)
-        if check_inp == 'ok':
+        check_inp = self.check_login_pswd(login_inp, pswd_inp, origin=SIGN_IN, db_log_pswd=user_data_from_db)
+        if check_inp == OK:
             query_db.Database().save_user_id(login_inp, pswd_inp)
             self.next_window(login_inp, pswd_inp)
         else:
@@ -33,12 +33,12 @@ class Authorization(QMainWindow):
         login_inp, pswd_inp = self.ledit_login.text(), self.ledit_pswd.text()
         user_data_from_db, check_inp = query_db.Database().get_log_pswd_db(login_inp), self.check_login_pswd(login_inp,
                                                                                                              pswd_inp)
-        if check_inp == 'ok':
+        if check_inp == OK:
             if user_data_from_db is None:
                 query_db.Database().insert_to_db(login_inp, pswd_inp)
                 self.next_window(login_inp, pswd_inp)
             else:
-                self.statusBar().showMessage('Такой пользователь уже существует')
+                self.statusBar().showMessage(USER_EXISTS)
         else:
             self.statusBar().showMessage(check_inp)
 
@@ -48,18 +48,18 @@ class Authorization(QMainWindow):
         self.hide()
         self.main_window.show()
 
-    def check_login_pswd(self, login_inp, pswd_inp, origin='sign_up', db_log_pswd=None):
+    def check_login_pswd(self, login_inp, pswd_inp, origin=SIGN_UP, db_log_pswd=None):
         try:
             if len(login_inp) == 0:
-                raise Exception('Введите логин')
-            elif origin == 'sign_in' and db_log_pswd is None:
-                raise Exception('Такого пользователя не существует')
+                raise Exception(ENTER_LOGIN)
+            elif origin == SIGN_IN and db_log_pswd is None:
+                raise Exception(USER_DOES_NOT_EXIST)
             elif len(pswd_inp) == 0:
-                return 'Введите пароль'
-            elif origin == 'sign_in' and pswd_inp != str(db_log_pswd[2]):
-                raise Exception('Неправильный пароль')
+                raise Exception(ENTER_PASSWORD)
+            elif origin == SIGN_IN and pswd_inp != str(db_log_pswd[2]):
+                raise Exception(WROGN_PASSWORD)
             else:
-                raise Exception('ok')
+                raise Exception(OK)
         except Exception as error:
             return str(error)
 

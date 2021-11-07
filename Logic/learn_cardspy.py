@@ -3,17 +3,17 @@ import random
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 
-import constants
-import entre_mainlearn
-import messageboxes
+from constants import *
+import learn_mainpy
+import same_functions
 import query_db
 import load_words_for_learning
 
 
 class Cards(QMainWindow):
-    def __init__(self, module_id=''):
+    def __init__(self, module_id=None):
         super().__init__()
-        uic.loadUi('../Designs/learn_cards.ui', self)
+        uic.loadUi(LEARN_CARDS_DESIGN, self)
         self.module_id = module_id
         self.run()
 
@@ -21,6 +21,14 @@ class Cards(QMainWindow):
         self.get_words()
         self.btn_know.clicked.connect(self.learned_word)
         self.btn_learn_more.clicked.connect(self.show_words)
+        self.btn_exit.clicked.connect(self.back_to_main)
+        self.btn_word_def.clicked.connect(self.flip)
+
+    def flip(self):
+        if self.btn_word_def.text() == self.line[2]:
+            self.btn_word_def.setText(self.line[1])
+        else:
+            self.btn_word_def.setText(self.line[2])
 
     def get_words(self):
         self.all_words, self.learned, self.left = load_words_for_learning.load_words(self.module_id)
@@ -33,7 +41,7 @@ class Cards(QMainWindow):
         if len(self.left) != 0:
             self.display_word()
         else:
-            messageboxes.show_sucsess_message(self, constants.MODULE_LEANED_TEXT)
+            same_functions.show_sucsess_message(self, BLOCK_LEARNED)
 
     def display_word(self):
         self.line = random.choice(self.left)
@@ -42,5 +50,12 @@ class Cards(QMainWindow):
     def learned_word(self):
         self.left.remove(self.line)
         self.learned.append(self.line)
-        query_db.Database().mark_as_learned(self.module_id, self.line[0])
+        query_db.Database().mark_as_learned(2, self.module_id, self.line[0])
         self.show_words()
+
+    def back_to_main(self):
+        self.exit_window = learn_mainpy.MainLearn(self.module_id)
+        self.hide()
+        self.exit_window.show()
+
+

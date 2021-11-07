@@ -197,28 +197,10 @@ color: rgb(255, 255, 255);</string>
      <string>🠔</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_edit">
-    <property name="geometry">
-     <rect>
-      <x>640</x>
-      <y>520</y>
-      <width>201</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(242, 180, 0);
-font: 10pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string>Редактировать</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btn_delete">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>640</x>
       <y>520</y>
       <width>201</width>
       <height>31</height>

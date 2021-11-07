@@ -3,7 +3,6 @@ import csv
 from PyQt5 import uic
 from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox, QMainWindow, QTableWidgetItem
 
-import learn_mainpy
 import main_windowpy
 import query_db
 import table
@@ -11,13 +10,10 @@ from constants import *
 
 
 class AddModule(QMainWindow):
-    def __init__(self, logged_user_id, module_words='None', module_id='None', module_name='None'):
+    def __init__(self, logged_user_id):
         super().__init__()
-        uic.loadUi('../Designs/add_module.ui', self)
+        uic.loadUi(ADD_MODULE_DESIGN, self)
         self.logged_user_id = int(logged_user_id)
-        self.module_id = module_id
-        self.module_words = module_words
-        self.module_name = module_name
         self.run()
         self.init_table()
 
@@ -30,19 +26,10 @@ class AddModule(QMainWindow):
         self.btn_del.clicked.connect(self.del_row)
         self.btn_create.clicked.connect(self.save_table)
         self.btn_exit.clicked.connect(self.message_show)
-        if self.module_id != 'None':
-            self.change_ui()
-            self.table_data(self.module_words)
 
     def change_ui(self):
-        self.lbl_create.setText('Редактировать учебный модуль')
+        self.lbl_create.setText(EDIT_MODULE_TEXT)
         self.ledit_name.setText(self.module_name)
-
-    def table_data(self, module_words):
-        self.tbl_wdt.setRowCount(len(module_words))
-        for i in range(len(module_words)):
-            for j in range(2):
-                self.tbl_wdt.setItem(i, j, QTableWidgetItem(module_words[i][j]))
 
     def back_to_main(self):
         self.main_window = main_windowpy.EzMain(self.logged_user_id)
@@ -52,21 +39,9 @@ class AddModule(QMainWindow):
     def message_show(self):
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("Все ваши данные не будут сохранены\n"
-                        "Вы точно хотите выйти?")
-        msg_box.setWindowTitle('Сообщение')
+        msg_box.setText(DELETE_MESSAGE)
+        msg_box.setWindowTitle(MESSAGE)
         msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        exit_value = msg_box.exec()
-        if exit_value == QMessageBox.Ok:
-            self.back_to_main()
-
-    def sucsess_message(self):
-        msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("Модуль успешно сохранен\n"
-                        "Возвращаю на главную страницу")
-        msg_box.setWindowTitle('Сообщение')
-        msg_box.setStandardButtons(QMessageBox.Ok)
         exit_value = msg_box.exec()
         if exit_value == QMessageBox.Ok:
             self.back_to_main()
@@ -110,10 +85,21 @@ class AddModule(QMainWindow):
                 if item is not None:
                     row.append(str(item.text()))
             all_words.append(row)
-        if len(all_words) > 4:
+        # для работы всех тестов требуется не менее 5 пар
+        if len(all_words) >= 5:
             module_id = query_db.Database().create_db_table(self.logged_user_id, self.ledit_name.text())
             for row in all_words:
                 query_db.Database().add_row_to_db(row, module_id)
-            self.sucsess_message()
+            self.success_message()
         else:
-            self.statusBar().showMessage('Введите слова более 4 слов')
+            self.statusBar().showMessage(NO_LESS_THAN_5_WORDS)
+
+    def success_message(self):
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText(SUCCESS_MESSAGE)
+        msg_box.setWindowTitle(MESSAGE)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        exit_value = msg_box.exec()
+        if exit_value == QMessageBox.Ok:
+            self.back_to_main()

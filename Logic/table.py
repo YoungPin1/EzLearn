@@ -1,6 +1,8 @@
+from constants import TABLE_STYLE_SHEET
+
 def create_table(self):
-    self.tbl_wdt.horizontalHeader().setStyleSheet("::section{Background-color:rgb(40,40,40)}")
-    self.tbl_wdt.verticalHeader().setStyleSheet("::section{Background-color:rgb(40,40,40)}")
+    self.tbl_wdt.horizontalHeader().setStyleSheet(TABLE_STYLE_SHEET)
+    self.tbl_wdt.verticalHeader().setStyleSheet(TABLE_STYLE_SHEET)
     self.tbl_wdt.setColumnCount(2)
     self.tbl_wdt.setHorizontalHeaderLabels(['Термин', 'Определение'])
     head_view = self.tbl_wdt.horizontalHeader()

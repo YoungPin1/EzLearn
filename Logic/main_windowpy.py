@@ -7,13 +7,14 @@ from PyQt5.QtWidgets import QMainWindow, QGridLayout, QPushButton, QWidget
 import add_module
 import learn_mainpy
 import query_db
+from constants import *
 
 
 class EzMain(QMainWindow):
     def __init__(self, logged_user_id):
         self.logged_user_id = logged_user_id
         super().__init__()
-        uic.loadUi('../Designs/main_window.ui', self)
+        uic.loadUi(EZMAIN_DESIGN, self)
         self.run()
 
     def run(self):
@@ -30,7 +31,8 @@ class EzMain(QMainWindow):
         self.scroll_ar.setWidget(self.widget)
 
     def mark_widgets(self):
-        self.names_ids = query_db.Database().get_module_names(self.logged_user_id)
+        self.names_ids = query_db.Database().get_module_names(self.logged_user_id) \
+            # 3 в этой функции - количество столбцов в таблице
         rows = math.ceil(len(self.names_ids) / 3)
         while len(self.names_ids) < rows * 3:
             self.names_ids.append(('', ''))
@@ -41,7 +43,6 @@ class EzMain(QMainWindow):
         for position, name in zip(self.positions, self.names_ids):
             if name == ('', ''):
                 continue
-            btn_name = 'btn_' + str(name[0])
             self.btn_name = QPushButton(self)
             self.btn_name.setText(str(name[0]))
             self.btn_name.setAccessibleName(str(name[1]))

@@ -1,18 +1,19 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QAbstractItemView, QMessageBox, QFileDialog
 
-import add_module
 import learn_bhpy
 import learn_cardspy
+import learnwritepy
 import main_windowpy
 import query_db
 import table
+from constants import *
 
 
 class MainLearn(QMainWindow):
-    def __init__(self, module_id=''):
+    def __init__(self, module_id=None):
         super().__init__()
-        uic.loadUi('../Designs/learn_main.ui', self)
+        uic.loadUi(MAIN_LEARN_DESIGN, self)
         self.logged_user_id, self.module_name = query_db.Database().get_name_id(module_id)[0]
         self.module_id = module_id
         self.db_words = query_db.Database().words_from_db(self.module_id)
@@ -28,25 +29,35 @@ class MainLearn(QMainWindow):
     def run(self):
         self.btn_exit.clicked.connect(self.back_to_main)
         self.fill_table(self.db_words)
-        self.btn_edit.clicked.connect(self.edit)
         self.btn_download.clicked.connect(self.download)
         self.btn_delete.clicked.connect(self.detele_message)
         self.btn_cards.clicked.connect(self.check_if_progress_100)
         self.btn_learbh.clicked.connect(self.check_if_progress_100)
+        self.btn_write.clicked.connect(self.check_if_progress_100)
         self.btn_reset.clicked.connect(self.reset)
+
+    def write(self):
+        self.write_window = learnwritepy.Write(module_id=self.module_id)
+        self.hide()
+        self.write_window.show()
 
     def count_progress(self):
         all_words = query_db.Database().get_progress(self.module_id)
-        total = [float(i[2] / 2) for i in all_words]
+        # делится на 2 для счета процентов, потому что степень изученности хранится в формате от 0 до 2
+        # на 4 позиции в кортеже стоит этот прогресс
+        total = [float(i[4] / 2) for i in all_words]
         if len(all_words) != 0:
+            # 100 отображается в процентах
             self.progress = (sum(total) / len(all_words)) * 100
             self.prbar.setValue(self.progress)
+        return self.progress
 
     def reset(self):
         query_db.Database().reset_progress(self.module_id)
         self.count_progress()
 
     def fill_table(self, reader):
+        # 2 - количество столбцов в таблице
         self.tbl_wdt.setColumnCount(2)
         self.tbl_wdt.setRowCount(len(reader))
         for i in range(len(reader)):
@@ -54,12 +65,15 @@ class MainLearn(QMainWindow):
                 self.tbl_wdt.setItem(i, j, QTableWidgetItem(reader[i][j]))
 
     def check_if_progress_100(self):
+        # 100 - максимальный прогресс в процентах
         if self.progress == 100:
             self.reset()
         if self.sender().text() == 'Карточки':
             self.cards()
         elif self.sender().text() == 'Заучивание':
             self.by_hard()
+        elif self.sender().text() == 'Письмо':
+            self.write()
 
     def by_hard(self):
         self.cards_window = learn_bhpy.ByHeart(module_id=self.module_id)
@@ -69,9 +83,8 @@ class MainLearn(QMainWindow):
     def detele_message(self):
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("Модуль будет удален без возможности восстановления\n"
-                        "Вы точно хотите выйти?")
-        msg_box.setWindowTitle('Сообщение')
+        msg_box.setText(DELETE_MODULE_TEXT)
+        msg_box.setWindowTitle(MESSAGE)
         msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         exit_value = msg_box.exec()
         if exit_value == QMessageBox.Ok:
@@ -81,11 +94,10 @@ class MainLearn(QMainWindow):
         query_db.Database().delete(module_id)
         self.back_to_main()
 
-    def edit(self):
-        self.edit_window = add_module.AddModule(self.logged_user_id, module_words=self.db_words,
-                                                module_id=self.module_id, module_name=self.module_name)
+    def cards(self):
+        self.cards_window = learn_cardspy.Cards(module_id=self.module_id)
         self.hide()
-        self.edit_window.show()
+        self.cards_window.show()
 
     def download(self):
         table_dir = QFileDialog.getSaveFileName(self, "Сохранить файл", "", ".csv")[0]
@@ -102,30 +114,24 @@ class MainLearn(QMainWindow):
     def download_message(self):
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("Модуль успещно сохранен")
-        msg_box.setWindowTitle('Сообщение')
+        msg_box.setText(MESSAGE_SAVED)
+        msg_box.setWindowTitle(MESSAGE)
         msg_box.setStandardButtons(QMessageBox.Ok)
         exit_value = msg_box.exec()
         if exit_value == QMessageBox.Ok:
             msg_box.done(1)
 
-    def show_warning(self):
-        msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("После редактирования прогресс будет сброшен\n"
-                        "Вы точно хотите изменить модуль?")
-        msg_box.setWindowTitle('Сообщение')
-        msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        exit_value = msg_box.exec()
-        if exit_value == QMessageBox.Ok:
-            self.edit()
-
-    def cards(self):
-        self.cards_window = learn_cardspy.Cards(module_id=self.module_id)
-        self.hide()
-        self.cards_window.show()
-
     def back_to_main(self):
         self.main_window = main_windowpy.EzMain(self.logged_user_id)
         self.hide()
         self.main_window.show()
+
+    def show_warning(self):
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setText(MODULE_RESET)
+        msg_box.setWindowTitle(MESSAGE)
+        msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        exit_value = msg_box.exec()
+        if exit_value == QMessageBox.Ok:
+            self.edit()
