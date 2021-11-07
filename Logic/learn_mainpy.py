@@ -1,4 +1,3 @@
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QAbstractItemView, QMessageBox, QFileDialog
 
 import learn_bhpy
@@ -7,13 +6,14 @@ import learnwritepy
 import main_windowpy
 import query_db
 import table
+from Designs.design_learn_main import Ui_MainWindow
 from constants import *
 
 
-class MainLearn(QMainWindow):
+class MainLearn(QMainWindow, Ui_MainWindow):
     def __init__(self, module_id=None):
         super().__init__()
-        uic.loadUi(MAIN_LEARN_DESIGN, self)
+        self.setupUi(self)
         self.logged_user_id, self.module_name = query_db.Database().get_name_id(module_id)[0]
         self.module_id = module_id
         self.db_words = query_db.Database().words_from_db(self.module_id)

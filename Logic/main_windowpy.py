@@ -1,20 +1,19 @@
 import math
 
-from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QPushButton, QWidget
 
 import add_module
 import learn_mainpy
 import query_db
-from constants import *
+from Designs.design_main_window import Ui_MainWindow
 
 
-class EzMain(QMainWindow):
+class EzMain(QMainWindow, Ui_MainWindow):
     def __init__(self, logged_user_id):
-        self.logged_user_id = logged_user_id
         super().__init__()
-        uic.loadUi(EZMAIN_DESIGN, self)
+        self.setupUi(self)
+        self.logged_user_id = logged_user_id
         self.run()
 
     def run(self):

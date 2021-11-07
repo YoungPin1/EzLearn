@@ -1,18 +1,18 @@
 import csv
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox, QMainWindow, QTableWidgetItem
 
 import main_windowpy
 import query_db
 import table
+from Designs.design_add_module import Ui_MainWindow
 from constants import *
 
 
-class AddModule(QMainWindow):
+class AddModule(QMainWindow, Ui_MainWindow):
     def __init__(self, logged_user_id):
         super().__init__()
-        uic.loadUi(ADD_MODULE_DESIGN, self)
+        self.setupUi(self)
         self.logged_user_id = int(logged_user_id)
         self.run()
         self.init_table()

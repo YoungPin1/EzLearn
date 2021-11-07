@@ -1,19 +1,19 @@
 import random
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 
 import learn_mainpy
 import load_words_for_learning
 import query_db
 import same_functions
+from Designs.design_learn_bh import Ui_MainWindow
 from constants import *
 
 
-class ByHeart(QMainWindow):
+class ByHeart(QMainWindow, Ui_MainWindow):
     def __init__(self, module_id=None):
         super().__init__()
-        uic.loadUi(LEARN_BH_DESIGN, self)
+        self.setupUi(self)
         self.module_id = module_id
         self.count = 0
         self.done = False

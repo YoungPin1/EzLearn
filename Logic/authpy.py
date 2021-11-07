@@ -1,15 +1,15 @@
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
-
+from PyQt5 import QtGui
 import main_windowpy
 import query_db
+from Designs.design_authorization import Ui_MainWindow
 from constants import *
 
 
-class Authorization(QMainWindow):
+class Authorization(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(AUTHORIZATION_DESIGN, self)
+        self.setupUi(self)
         self.run()
 
     def run(self):

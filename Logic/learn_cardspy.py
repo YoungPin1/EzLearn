@@ -1,19 +1,19 @@
 import random
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 
-from constants import *
 import learn_mainpy
-import same_functions
-import query_db
 import load_words_for_learning
+import query_db
+import same_functions
+from Designs.design_learn_cards import Ui_MainWindow
+from constants import *
 
 
-class Cards(QMainWindow):
+class Cards(QMainWindow, Ui_MainWindow):
     def __init__(self, module_id=None):
         super().__init__()
-        uic.loadUi(LEARN_CARDS_DESIGN, self)
+        self.setupUi(self)
         self.module_id = module_id
         self.run()
 
@@ -57,5 +57,3 @@ class Cards(QMainWindow):
         self.exit_window = learn_mainpy.MainLearn(self.module_id)
         self.hide()
         self.exit_window.show()
-
-

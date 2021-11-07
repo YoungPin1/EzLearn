@@ -1,19 +1,19 @@
 import random
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 
 import learn_mainpy
 import load_words_for_learning
 import query_db
 import same_functions
+from Designs.design_learn_write import Ui_MainWindow
 from constants import *
 
 
-class Write(QMainWindow):
+class Write(QMainWindow, Ui_MainWindow):
     def __init__(self, module_id=None):
         super().__init__()
-        uic.loadUi(LEARN_WRITE_DESIGN, self)
+        self.setupUi(self)
         self.module_id = module_id
         self.all_words, self.learned, self.left = load_words_for_learning.load_words(self.module_id)
         self.count = 0
