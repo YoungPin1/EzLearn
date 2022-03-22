@@ -1,6 +1,4 @@
-import csv
-
-from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QMessageBox, QMainWindow
 
 import main_windowpy
 import query_db
@@ -21,7 +19,6 @@ class AddModule(QMainWindow, Ui_MainWindow):
         table.create_table(self)
 
     def run(self):
-        self.btn_import.clicked.connect(self.transform_to_csv)
         self.btn_add.clicked.connect(self.add_row)
         self.btn_del.clicked.connect(self.del_row)
         self.btn_create.clicked.connect(self.save_table)
@@ -53,26 +50,6 @@ class AddModule(QMainWindow, Ui_MainWindow):
     def del_row(self):
         if self.ledit_del.text() != '':
             self.tbl_wdt.removeRow(int((self.ledit_del.text())) - 1)
-
-    def transform_to_csv(self):
-        delim, quote = ';', '"'
-        table_dir = QFileDialog.getOpenFileName(self, 'Выбрать файл', '')[0]
-        with open(table_dir, mode='r', encoding='utf8') as file:
-            with open(IMPORT_MODULE_DIR, mode='w', encoding="utf8") as csvfile:
-                for i in file.readlines():
-                    line = i.replace(quote, '"').strip().split(delim)
-                    csvfile.write(';'.join(line) + '\n')
-        self.import_table()
-
-    def import_table(self):
-        with open(IMPORT_MODULE_DIR, mode='r', encoding="utf8") as csvfile:
-            reader = csv.reader(csvfile, delimiter=';', quotechar='"')
-            for i, row in enumerate(reader):
-                self.tbl_wdt.setRowCount(
-                    self.tbl_wdt.rowCount() + 1)
-                for j, elem in enumerate(row):
-                    self.tbl_wdt.setItem(
-                        i, j, QTableWidgetItem(elem))
 
     def save_table(self):
         all_words = []

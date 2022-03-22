@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QAbstractItemView, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QAbstractItemView, QMessageBox
 
 import learn_bhpy
 import learn_cardspy
@@ -29,7 +29,6 @@ class MainLearn(QMainWindow, Ui_MainWindow):
     def run(self):
         self.btn_exit.clicked.connect(self.back_to_main)
         self.fill_table(self.db_words)
-        self.btn_download.clicked.connect(self.download)
         self.btn_delete.clicked.connect(self.detele_message)
         self.btn_cards.clicked.connect(self.check_if_progress_100)
         self.btn_learbh.clicked.connect(self.check_if_progress_100)
@@ -98,28 +97,6 @@ class MainLearn(QMainWindow, Ui_MainWindow):
         self.cards_window = learn_cardspy.Cards(module_id=self.module_id)
         self.hide()
         self.cards_window.show()
-
-    def download(self):
-        table_dir = QFileDialog.getSaveFileName(self, "Сохранить файл", "", ".csv")[0]
-        with open(table_dir, mode='w', encoding='utf8') as file:
-            for i in range(self.tbl_wdt.rowCount()):
-                row = []
-                for j in range(self.tbl_wdt.columnCount()):
-                    item = self.tbl_wdt.item(i, j)
-                    if item is not None:
-                        row.append(item.text())
-                file.write(';'.join(row) + '\n')
-        self.download_message()
-
-    def download_message(self):
-        msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText(MESSAGE_SAVED)
-        msg_box.setWindowTitle(MESSAGE)
-        msg_box.setStandardButtons(QMessageBox.Ok)
-        exit_value = msg_box.exec()
-        if exit_value == QMessageBox.Ok:
-            msg_box.done(1)
 
     def back_to_main(self):
         self.main_window = main_windowpy.EzMain(self.logged_user_id)
