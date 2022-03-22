@@ -44,7 +44,7 @@ color: rgb(255, 255, 255)
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>601</width>
+      <width>591</width>
       <height>41</height>
      </rect>
     </property>
@@ -82,7 +82,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>20</x>
       <y>40</y>
-      <width>371</width>
+      <width>761</width>
       <height>21</height>
      </rect>
     </property>
@@ -100,7 +100,7 @@ color: rgb(255, 255, 255)
      <rect>
       <x>20</x>
       <y>120</y>
-      <width>601</width>
+      <width>591</width>
       <height>351</height>
      </rect>
     </property>
@@ -113,11 +113,20 @@ border-color: rgb(40, 40, 40);</string>
    <widget class="QPushButton" name="btn_del">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>620</x>
       <y>120</y>
-      <width>111</width>
+      <width>131</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(242, 180, 0);
@@ -132,7 +141,7 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="ledit_del">
     <property name="geometry">
      <rect>
-      <x>747</x>
+      <x>750</x>
       <y>120</y>
       <width>41</width>
       <height>41</height>
@@ -153,9 +162,9 @@ color: rgb(255, 255, 255)
    <widget class="QPushButton" name="btn_add">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>620</x>
       <y>170</y>
-      <width>111</width>
+      <width>131</width>
       <height>41</height>
      </rect>
     </property>
